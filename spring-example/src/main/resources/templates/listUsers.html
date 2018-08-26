@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>List Users</title>
+<script src="http://code.jquery.com/jquery-2.1.3.js"></script>
+</head>
+<body>
+<script type="text/javascript">
+	function removeItem(index){
+		var id = $("[id='users" + index + ".id']").val();
+		$.ajax({
+            type : "DELETE",
+            url : "/rest/user/"+id,
+            success : function(data)  {
+            	location.reload();
+            }
+        });
+	}
+</script>
+
+List users!
+<form action="#" th:action="@{/users/save}" th:object="${form}" method="post">
+	<table border="1">
+		<tr th:each="user, rowStat : *{users}">
+	      <td>
+	      	 <input type="hidden" th:field="*{users[__${rowStat.index}__].id}"/>
+	      	 <input type="text" th:field="*{users[__${rowStat.index}__].firstName}"/>
+	      </td>
+	      <td>
+	      	<input type="text" th:field="*{users[__${rowStat.index}__].lastName}"/>
+	      </td>
+	      <td>
+	      	<input type="text" th:field="*{users[__${rowStat.index}__].age}"/>
+	      </td>
+	      <td>
+	      	<input type="button"th:onclick="'removeItem(\''+ ${rowStat.index} +'\')'"  value="DEL">
+	      </td>
+	    </tr>
+	</table>
+	<a href="/users/new">New User</a>
+	<input type="submit" value="Send">
+</form>
+</body>
+</html>
